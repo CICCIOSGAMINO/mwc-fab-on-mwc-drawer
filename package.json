@@ -1,0 +1,23 @@
+{
+  "name": "web-mwc-fab-on-mwc-drawer",
+  "version": "1.0.0",
+  "description": "Simple Material Web Component fab pattern",
+  "main": "pwa-lite.js",
+  "repository": "https://github.com/CICCIOSGAMINO/web-mwc-fab-on-mwc-drawer.git",
+  "author": "@cicciosgamino <marco.canali@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "serve": "wds --node-resolve --watch"
+  },
+  "private": false,
+  "dependencies": {
+    "@material/mwc-drawer": "^0.20.0",
+    "@material/mwc-fab": "^0.20.0",
+    "@material/mwc-icon": "^0.20.0",
+    "@material/mwc-icon-button": "^0.20.0",
+    "lit-element": "^2.4.0"
+  },
+  "devDependencies": {
+    "@web/dev-server": "^0.1.0"
+  }
+}
