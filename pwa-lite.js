@@ -30,47 +30,68 @@ class PwaLite extends LitElement {
 
       :host {
         display: block;
-        position: relative;
-        /* CSS variables & Global styles */ 
+        width: 100%;
+        height: 100vh;
 
         /* drawer 100% full screen, default is 256px (or 100%) */
         --mdc-drawer-width: 100%;
       }
 
-      /* drawer */
-      .drawer-content {
-        background-color: var(--mdc-theme-background);
-      }
-
-      #container {
+      mwc-drawer {
         position: relative;
-        background-color: var(--mdc-theme-background);
-        /* overflow: hidden; */
-      }
-      
-      .main-content {
-        min-height: 300px;
-        padding: 48px 18px 0 18px;
+        z-index: 1;
       }
 
-      /* fab menu button */ 
+      /* fab menu button  #fab-menu */ 
       #fab-menu {
         position: fixed;
         bottom: 1.5em;
         right: 2em;
-        z-index: 10;
+        z-index: 6;
+
+        /* -webkit-transition: 1s ease-in-out; */
+        /* -moz-transition: .3s ease-in-out; */
+        /* -o-transition: .3s ease-in-out; */
+        transition: .3s ease-in-out;
+      }
+
+      /* handle the animations */
+      #fab-menu[opening] {
+        /* -webkit-transform: translateX(-200px); */
+        /* -moz-transform: translateX(-200px); */
+        /* -o-transform: translateX(-200px); */
+        /* -ms-transform: translateX(-200px); */
+        /* transform: translateX(-200px); */
+        transform: translateX(calc(-50vw + 56px));
       }
       `
   }
 
   // open / close drawer
   _handleDrawer () {
-    console.log('@Handled')
-    // TODO
-    this.shadowRoot.querySelector('#fab-menu').style.opacity = '0.7'
-    this.shadowRoot.querySelector('#fab-menu').style.transform = 'translateX(-200px)'
-    this.shadowRoot.querySelector('#fab-menu').style.zIndex = '10'
     this.drawerIsOpen = !this.drawerIsOpen
+    // start to open
+    if (this.drawerIsOpen) {
+      console.log('>> OPENING')
+      this.shadowRoot.querySelector('#fab-menu').setAttribute('opening', '')
+      this.shadowRoot.querySelector('#fab-menu').setAttribute('icon', 'close')
+    }
+    // start to close
+    if (!this.drawerIsOpen) {
+      console.log('>> CLOSING')
+      this.shadowRoot.querySelector('#fab-menu').removeAttribute('opening')
+      this.shadowRoot.querySelector('#fab-menu').setAttribute('icon', 'menu')
+    }
+  }
+
+  _handleDrawerOpened () {
+    this.drawerIsOpen = true
+    // strip the inert attribute (to active fab on opened drawer)
+    this.shadowRoot.querySelector('#fab-menu').removeAttribute('inert')
+  }
+
+  _handleDrawerClosed () {
+    this.drawerIsOpen = false
   }
 
   render () {
@@ -81,9 +102,9 @@ class PwaLite extends LitElement {
       <mwc-drawer
         hasHeader 
         type="modal" 
-        ?open="${this.drawerIsOpen}" 
-        @MDCDrawer:opened="${() => this.drawerIsOpen = true}"
-        @MDCDrawer:closed="${() => this.drawerIsOpen = false}">
+        ?open="${this.drawerIsOpen}"
+        @MDCDrawer:opened=${this._handleDrawerOpened}
+        @MDCDrawer:closed=${this._handleDrawerClosed}>
 
         <span slot="title">Drawer Title</span>
         <span slot="subtitle">subtitle</span>
@@ -102,14 +123,14 @@ class PwaLite extends LitElement {
         </div>
 
       </mwc-drawer>
-      
+
       <!-- Absolute fab -->
       <mwc-fab
         id="fab-menu"
         icon="menu"
         label="menu"
         @click="${this._handleDrawer}">
-      </mwc-fab> 
+      </mwc-fab>
 
       </main>
     `
